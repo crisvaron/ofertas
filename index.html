@@ -3,6 +3,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow,noarchive">
 <meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="connect-src 'self' https://cristina-ofertas-relay.crisvaron.workers.dev; form-action 'none'; base-uri 'none'">
 <title>Ofertas del día · 2026-10-25</title>
 <style>
 *{box-sizing:border-box}body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;margin:0;color:#1d2330;background:#f6f7f9;font-size:14px}
@@ -131,6 +132,7 @@ tr.empty td{color:#8a93a3;text-align:center;padding:18px}a{color:#1f6feb}footer{
     });
   }
   var FB=["Rechazada por la empresa", "Retirada por m\u00ed"];
+  var ACTION_URL="https://cristina-ofertas-relay.crisvaron.workers.dev/";
   var OVK='cv_overrides_v1',NAMES={aplicar:'Aplicar',descartar:'Descartada',ya_aplique:'Aplicada',no_aplique:'No aplicada'};
   function ovGet(){try{return JSON.parse(localStorage.getItem(OVK)||'{}');}catch(e){return {};}}
   function ovSet(o){try{localStorage.setItem(OVK,JSON.stringify(o));}catch(e){}}
@@ -157,7 +159,7 @@ tr.empty td{color:#8a93a3;text-align:center;padding:18px}a{color:#1f6feb}footer{
   function ovSave(p){var o=ovGet();o[p.id]={action:p.action,nuevo_estado:p.nuevo_estado||'',ts:Date.now()};ovSet(o);return o[p.id];}
   function send(tr,p,order,msg,onFail){
     msg.className='msg';msg.textContent='Enviando…';
-    return fetch('/.netlify/functions/accion',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)})
+    return fetch(ACTION_URL,{method:'POST',mode:'cors',credentials:'omit',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)})
       .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);var v=ovSave(p);ovPaint(tr,v);msg.textContent=ovLabel(v)+' · guardado en tu hoja en unos minutos';})
       .catch(function(){
         if(onFail)onFail();
